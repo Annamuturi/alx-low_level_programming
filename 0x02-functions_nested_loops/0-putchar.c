@@ -1,9 +1,9 @@
 #include "main.h"
 /**
- * *main -checke the code 
+ * *main - prints _purchar 
  * 
- * Return: Always 0.
- * */
+ * Return: Always 0. in success
+ */
 int main(void)
 {
    _putchar(95); /*95 is asci for _*/
