@@ -31,25 +31,25 @@ ssize_t read_textfile(const char *filename, size_t letters)
 	if (buffer == NULL)
 	{
 		close(fd);
-		free(buffer);
 		return (0); /*Error allocating memory*/
 	}
-	byte_read = read(fd, buffer, letters);
-
-	if (byte_read != letters)
+	while (letters > 0 && (byte_read = read(fd, buffer, letters)) > 0)
 	{
-		close(fd);
-		free(buffer);
-		return (0); /*Error reading file*/
-	}
 	bytes_written = write(STDOUT_FILENO, buffer, byte_read);
 	if (bytes_written != byte_read)
 	{
 		free(buffer);
-		close(fd);
 		return (0); /*Error failed to write to stdout*/
+	}
+	letters -= byte_read;
+	byte_read += byte_read;
 	}
 	free(buffer);
 	close(fd);
+
+	if (byte_read == -SIZE_MAX)
+	{
+		return (0);
+	}
 	return (byte_read);
 }
