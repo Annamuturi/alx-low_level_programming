@@ -6,34 +6,30 @@
  * read_textfile - reads a text file and prints it to POSIX stdout
  * @filename: A pointer to the name of the file.
  * @letters: The number of letters the function should read and print.
+ *
  * Return: the number of letters the function should read and print.
  */
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	int fd, byte_read, bytes_written;
+	int file, lprint, lread, closed;
 	char *buffer;
 
+	file = lprint = lread = 0;
+	buffer = malloc(letters * sizeof(char));
 	if (filename == NULL)
-	return (0); /*Error file nameis Null*/
-	fd = open(filename, O_RDONLY);
-	if (fd  == -1)
-	return (0); /*Error opening a file*/
-	buffer = malloc(sizeof(char) * letters);
-	if (buffer == NULL)
-	{
-		close(fd);
-		return (0); /*Error allocating memory*/
-	}
-	while (letters > 0 && (byte_read = read(fd, buffer, letters)) > 0)
-	if (byte_read == -1)
-	return (0);
-	bytes_written = write(STDOUT_FILENO, buffer, byte_read);
-	if (bytes_written != byte_read)
-		return (0); /*Error failed to write to stdout*/
-	free(buffer);
-	close(fd);
-
-	if (byte_read == -1)
 		return (0);
-	return (byte_read);
+	file = open(filename, O_RDONLY);
+	if (file == -1)
+		return (0);
+	lread = read(file, buffer, letters);
+	if (lread == -1)
+		return (0);
+	lprint = write(STDOUT_FILENO, buffer, lread);
+	if (lprint == -1)
+		return (0);
+	closed = close(file);
+	if (closed == -1)
+		return (0);
+	free(buffer);
+	return (lread);
 }
